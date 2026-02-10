@@ -33,6 +33,19 @@ class _WebViewScreenState extends State<WebViewScreen> {
             setState(() {
               _isLoading = false;
             });
+            // Inject JS to force popups/new tabs to open in current window
+            _controller.runJavaScript(
+              "window.open = function(url) { window.location.href = url; }; " +
+              "document.addEventListener('click', function(e) { " +
+              "  var target = e.target; " +
+              "  while (target && target.tagName !== 'A') { " +
+              "    target = target.parentElement; " +
+              "  } " +
+              "  if (target && target.target === '_blank') { " +
+              "    target.target = '_self'; " +
+              "  } " +
+              "}, true);"
+            );
           },
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
@@ -40,8 +53,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
           },
         ),
       )
+      ..setUserAgent("Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36")
       ..loadRequest(Uri.parse('http://streamrolla.duckdns.org/'));
   }
+
 
   @override
   Widget build(BuildContext context) {
