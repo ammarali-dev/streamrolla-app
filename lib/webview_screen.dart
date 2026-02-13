@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({super.key});
@@ -11,6 +12,25 @@ class WebViewScreen extends StatefulWidget {
 class _WebViewScreenState extends State<WebViewScreen> {
   late final WebViewController _controller;
   bool _isLoading = true;
+
+  // Helper method to detect if URL is a Google OAuth URL
+  bool _isOAuthUrl(String url) {
+    return url.contains('accounts.google.com') ||
+           url.contains('oauth') ||
+           url.contains('google.com/o/oauth2');
+  }
+
+  // Launch OAuth URL in Chrome Custom Tabs
+  Future<void> _launchOAuthUrl(String url) async {
+    try {
+      await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      debugPrint('Error launching OAuth URL: $e');
+    }
+  }
 
   @override
   void initState() {
@@ -49,6 +69,11 @@ class _WebViewScreenState extends State<WebViewScreen> {
           },
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
+            // Intercept OAuth URLs and open in Chrome Custom Tabs
+            if (_isOAuthUrl(request.url)) {
+              _launchOAuthUrl(request.url);
+              return NavigationDecision.prevent;
+            }
             return NavigationDecision.navigate;
           },
         ),
