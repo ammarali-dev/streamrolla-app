@@ -35,7 +35,7 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -48,16 +48,16 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                 const Icon(
                   Icons.storefront_outlined,
                   size: 80,
-                  color: Colors.blue,
+                  color: Colors.red,
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  'Visit Creator Store',
+                  'Search your favourite creator',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -66,21 +66,30 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.black54,
+                    color: Colors.white70,
                   ),
                 ),
                 const SizedBox(height: 48),
                 TextFormField(
                   controller: _usernameController,
+                  style: const TextStyle(color: Colors.white),
+                  cursorColor: Colors.red,
                   decoration: InputDecoration(
                     labelText: 'Username',
+                    labelStyle: const TextStyle(color: Colors.redAccent),
                     hintText: 'e.g., alice',
-                    border: OutlineInputBorder(
+                    hintStyle: const TextStyle(color: Colors.white38),
+                    enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.white24),
                     ),
-                    prefixIcon: const Icon(Icons.person_outline),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.red),
+                    ),
+                    prefixIcon: const Icon(Icons.person_outline, color: Colors.red),
                     filled: true,
-                    fillColor: Colors.grey[50],
+                    fillColor: Colors.grey[900],
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -98,7 +107,7 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                   onPressed: _navigateToStore,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -106,7 +115,7 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                     elevation: 2,
                   ),
                   child: const Text(
-                    'Go to Store',
+                    'Submit',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
