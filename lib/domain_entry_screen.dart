@@ -52,7 +52,7 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  'Search your favourite creator',
+                  'Search Your Favourite Creator',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,
