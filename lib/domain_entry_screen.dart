@@ -9,13 +9,26 @@ class DomainEntryScreen extends StatefulWidget {
 }
 
 class _DomainEntryScreenState extends State<DomainEntryScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _domainController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _navigateToStore() {
     if (_formKey.currentState!.validate()) {
-      final username = _usernameController.text.trim();
-      final url = 'http://$username.streamrolla.duckdns.org'; 
+      String input = _domainController.text.trim();
+      
+      // Remove trailing slash if user typed one
+      if (input.endsWith('/')) {
+        input = input.substring(0, input.length - 1);
+      }
+      
+      String url;
+      // If the input contains a dot (e.g., "example.com"), treat it as a full custom domain
+      if (input.contains('.')) {
+        url = 'http://$input';
+      } else {
+        // Otherwise, treat it as a streamrolla subdomain
+        url = 'http://$input.public.streamrolla.com';
+      }
       
       Navigator.pushReplacement(
         context,
@@ -28,7 +41,7 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _domainController.dispose();
     super.dispose();
   }
 
@@ -52,7 +65,7 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  'Search Your Favourite Creator',
+                  'Enter Your Domain',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,
@@ -62,7 +75,7 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  'Enter the username of the creator you want to visit.',
+                  'Enter the full domain of the site you want to visit.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -71,13 +84,13 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                 ),
                 const SizedBox(height: 48),
                 TextFormField(
-                  controller: _usernameController,
+                  controller: _domainController,
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.red,
                   decoration: InputDecoration(
-                    labelText: 'Username',
+                    labelText: 'Domain',
                     labelStyle: const TextStyle(color: Colors.redAccent),
-                    hintText: 'e.g., alice',
+                    hintText: 'e.g., ammarswebsite',
                     hintStyle: const TextStyle(color: Colors.white38),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -87,16 +100,16 @@ class _DomainEntryScreenState extends State<DomainEntryScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: const BorderSide(color: Colors.red),
                     ),
-                    prefixIcon: const Icon(Icons.person_outline, color: Colors.red),
+                    prefixIcon: const Icon(Icons.language, color: Colors.red),
                     filled: true,
                     fillColor: Colors.grey[900],
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a username';
+                      return 'Please enter a domain';
                     }
                     if (value.contains(' ')) {
-                        return 'Username cannot contain spaces';
+                        return 'Domain cannot contain spaces';
                     }
                     return null;
                   },
